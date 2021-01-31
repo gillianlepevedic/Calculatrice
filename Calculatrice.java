@@ -3,13 +3,17 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Class principal
+ * point d'entree du programme
+ */
 public class Calculatrice {
-	private static Scanner clavier = new Scanner(System.in).useLocale(Locale.US);//Ouvre STDIN et pour les nombres réel il faut utiliser un point
-
 	public static void main(String[] arg){//Fonction principal
 		int choix =1;
+		Scanner clavier = new Scanner(System.in).useLocale(Locale.US);
+		LectureClavier clavierGigi = new LectureClavier(clavier);
 		while (choix != 0){
-			choix = menu();//Affiche le menu et demande un nombres
+			choix = menu(clavierGigi);//Affiche le menu et demande un nombres
 			
 			switch(choix) { 
 				case 0: 
@@ -17,47 +21,42 @@ public class Calculatrice {
 					break; 
 				case 1: 
 					System.out.println("Calcultrice mode Clasique");
-					clasic();//Lance le mode clasique 
+					clasic(clavierGigi);//Lance le mode clasique 
 				break; 
 				case 2: 
 					System.out.println("Calcultrice mode Trigonometrie");
-					trigo();//Lance le mode trigo
+					trigo(clavierGigi);//Lance le mode trigo
 					break; 
 				case 3: 
 					System.out.println("Calcultrice mode Ameliorer");
-					clasicAmeliorer();//Lance le mode ameliorer
+					clasicAmeliorer(clavierGigi);//Lance le mode ameliorer
 					break; 
 				default: System.out.println("Erreur : Choix inconnue"); //Normalement arrive jamais 
 			}
 		}
 	}
 
-	private static int menu(){
+	private static int menu(LectureClavier clavierGigi){
 		int mode;
 		System.out.print("Menu Calculatrice\n0 : Quitter\n1 : Clasique\n2 : Trigonometrie\n3 : Clasique Ameliorer\n");
-		mode = demandeentier();//demander un entier
-
-		while (mode < 0 || mode > 3){//Verifie si il est bien dans le menu
-			System.out.print("Donnez sois 0, 1, 2, 3:");
-			mode = demandeentier();
-		}
+		mode = clavierGigi.demandeEntierInterval(0, 3);//demander un entier
 		return mode;//retourne le choix
 	}
 
-	private static void clasic(){
+	private static void clasic(LectureClavier clavierGigi){
 		float nombres1=0;
 		float nombres2=0;
 		String operateur;
 		float resultat =0;
 
 		System.out.print("Donnez le premier nombres :");
-		nombres1 = demandefloat();//Demande une nombres réel
+		nombres1 = clavierGigi.demandeFloat();//Demande une nombres réel
 
 		System.out.print("Donnez l'operateur ( + - * / ):");
-		operateur = demandeoperateur("[/*\\-+]{1}", "+ - * /");//Demande un oprerateur soit  + - * / et si il y a une erreur il affiche le deuxieme en message d'erreur
+		operateur = clavierGigi.demandeRegex("[/*\\-+]{1}", "+ - * /");
 			
 		System.out.print("Donnez le deuxieme nombres :");
-		nombres2 = demandefloat();//Demande une nombres réel
+		nombres2 = clavierGigi.demandeFloat();//Demande une nombres réel
 
 		switch(operateur) { 
 			case "+": 
@@ -82,7 +81,7 @@ public class Calculatrice {
 		System.out.println(nombres1 + operateur + nombres2 + "=" + resultat);//Affiche le resultat
 	}
 
-	private static void trigo(){
+	private static void trigo(LectureClavier clavierGigi){
 		String operateur;
 		double resultat =0;
 		float co=-1;
@@ -90,30 +89,30 @@ public class Calculatrice {
 		float ch=-1;
 
 		System.out.print("Donnez la fonction a utiliser (sin, cos,tan):");
-		operateur = demandeoperateur("(sin|cos|tan)", "sin cos tan");
+		operateur =clavierGigi.demandeRegex("(sin|cos|tan)", "sin cos tan");
 
 		switch(operateur) { 
 			case "sin": 
 				System.out.print("Donnez le cote oppose :");
-				co = demandefloat();//Demande une nombres réel
+				co =clavierGigi.demandeFloat();//Demande une nombres réel
 				System.out.print("Donnez l'hypotenus' :");
-				ch = demandefloat();//Demande une nombres réel
+				ch =clavierGigi.demandeFloat();//Demande une nombres réel
 
 				resultat = Math.asin(co/ch);//Ca calcule l'angle en randian en fonction du coter oposer et de l'hypotenus
 				break; 
 			case "cos": 
 				System.out.print("Donnez le cote adjacent :");
-				ca = demandefloat();
+				ca =clavierGigi.demandeFloat();
 				System.out.print("Donnez l'hypotenus' :");
-				ch = demandefloat();
+				ch =clavierGigi.demandeFloat();
 
 				resultat = Math.acos(ca/ch);//Ca calcule l'angle en randian en fonction du coter adjacant et de l'hypotenus
 			break; 
 			case "tan": 
 				System.out.print("Donnez le cote oppose :");
-				co = demandefloat();
+				co =clavierGigi.demandeFloat();
 				System.out.print("Donnez l'adjacent' :");
-				ca = demandefloat();
+				ca =clavierGigi.demandeFloat();
 
 				resultat = Math.atan(co/ca);//Ca calcule l'angle en randian en fonction du coter adjacant et du coter oposer
 				break; 
@@ -122,7 +121,7 @@ public class Calculatrice {
 		System.out.println("L'angles est de " + resultat + " radian");//Affiche le resultat
 	}
 
-	private static void clasicAmeliorer(){
+	private static void clasicAmeliorer(LectureClavier clavierGigi){
 		float nombres1=-1;
 		float nombres2=0;
 		String operateur;
@@ -130,9 +129,7 @@ public class Calculatrice {
 
 
 		System.out.print("Donnez le calcul en entier: ");
-		operateur = demandeoperateur("[0-9\\.]+[/*\\-+]{1}[0-9\\.]+", "<nombres> <operateur> <nombres> (sans espace)");	//Demande un nombres avec ou sans virgule 
-																														//suivie d'un operateur + - * / et finir 
-																														//avec un nombres avec ou sans virgule
+		operateur =clavierGigi.demandeRegex("[0-9\\.]+[/*\\-+]{1}[0-9\\.]+", "<nombres> <operateur> <nombres> (sans espace)");
 
 		Pattern separateur = Pattern.compile("(.+)([/*\\-+]{1})(.+)");//Crée un  patern de 3 section avec comme element central + - * /
 		Matcher morceau = separateur.matcher(operateur);//Decomposer la chaine en trois section les 2 nombres et l'operateur
@@ -163,61 +160,5 @@ public class Calculatrice {
 			default: System.out.println("Erreur : Operateur inconnue"); //Normalement arrive jamais
 		}
 		System.out.println(nombres1 + operateur + nombres2 + "=" + resultat);//Affiche le resultat
-	}
-
-
-	private static int demandeentier(){
-        boolean ok=false;
-        int entier=0;
-
-        while (! ok){//Tant qu'il a pa lu un entier il sort pas
-            try {//Si la commande nextInt ne marche pas Alors il fait se qu'il y a dans catch 
-                entier = clavier.nextInt();//Si c'est un entier tout va bien sinon une erreur
-                ok = true;//Il a reussie a lire un entier
-            } 
-            catch (java.util.InputMismatchException e) {//Si l'entrer n'est pas un entier alors il fait ca
-                System.out.print("Erreur : Chiffre incorrect \nDonnez un nombre entier :") ;
-                clavier.nextLine();//Vide le clavier ca evite les erreur si on a tapez n'importe quoi
-            }  
-        }
-
-        return entier;//Retourne l'entier taper au clavier
-    }
-
-	private static float demandefloat(){
-        boolean ok=false;
-        float reel=0;
-
-        while (! ok){//Tant qu'il a pa lu un réel il sort pas
-            try {//Si la commande nextFloat ne marche pas Alors il fait se qu'il y a dans catch 
-                reel = clavier.nextFloat();//Si c'est un réel tout va bien sinon une erreur
-                ok = true;//Il a reussie a lire un réel
-            } 
-            catch (java.util.InputMismatchException e) {//Si l'entrer n'est pas un réel alors il fait ca
-                System.out.print("Erreur : Chiffre incorrect \nDonnez un nombre reel :") ;
-                clavier.nextLine();//Vide le clavier ca evite les erreur si on a tapez n'importe quoi
-            }  
-        }
-
-        return reel;//Retourne le réel taper au clavier
-	}
-
-	private static String demandeoperateur(String autoriserRegex, String autoriserFR){
-        boolean ok=false;
-        String operateur = "";
-
-        while (! ok){//Tant qu'il a pa lu un quelque chose qui match avec le Regex il sort pas
-            try {//Si la commande next ne marche pas Alors il fait se qu'il y a dans catch 
-                operateur = clavier.next(autoriserRegex);//Si la lecture au clavier est match avec un regex alors pas de probleme sinon erreur
-                ok = true;
-            } 
-            catch (java.util.InputMismatchException e) {//Si ca match pas
-				System.out.print("Erreur : Operateur incorrect \nVous devez utiliser seulement ( " + autoriserFR + " ) :") ;//Affiche un message d'erreur personaliser 
-																															//en fonction de se qu'on a mits en paramtres
-                clavier.nextLine();//Vide le clavier ca evite les erreur si on a tapez n'importe quoi
-            }  
-        }
-
-        return operateur;//Renvoie une chaine corespondant au Regex envoyer
 	}
 }

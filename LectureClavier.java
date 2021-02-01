@@ -1,15 +1,21 @@
 import java.util.Scanner;
 
 public class LectureClavier {
+
+
     //Initialise un scanner
     private Scanner clavier;
+
+
     /**
-     * Initialise le Scanner des qu'on fait appelle a la fonction
+     * Initialise le Scanner des qu'on fait appelle a la class
      * @param entrer le STDIN qu'on veut ecouter
      */
     public LectureClavier(Scanner entrer) {
         clavier = entrer;
     }
+
+
     /**
      * Demmande un entier et continue tant qu'il a pas un entier
      * @return retourne forcement un entier
@@ -32,6 +38,8 @@ public class LectureClavier {
         //retourne un entier
         return entier;
     }
+
+
     /**
      * Demmande un entier et continue tant qu'il a pas un entier positif
      * @return retourne forcement un entier positif
@@ -53,6 +61,8 @@ public class LectureClavier {
         //Retourne l'entier taper au clavier
         return entierP;
     }
+
+
     /**
      * Damande un entier entres un intervalle passer en paramettres. Les bornes sont compris dedans
      * @param min Ca serat le plus petit entier accepter
@@ -76,6 +86,8 @@ public class LectureClavier {
         //Retourne l'entier comprit dans l'interval
         return entierInter;
     }
+
+
     /**
      * Demmande un float et continue tant qu'il a pas un float avec un point si on utilise "Local.US"
      * @return retourne forcement un float
@@ -98,18 +110,8 @@ public class LectureClavier {
         //retourne un float
         return reel;
     }
-    /**
-     * Demande un mots avec maj ou/et min ou/et underscore
-     * @return retourne forcement un mots
-     */
-    public String demandeMot(){
-        //Initialise les variable utile
-        String mot = "";
-        //demande un mots corespondant au Regex
-        mot= demandeRegex("[A-Za-z_]+", "lettres min ,maj et underscore");
-        //Retourne un string avec des lettres et des underscore
-        return mot;
-    }
+
+
     /**
      * Demande une chaine qui coresponde au Regex envoyer en paramtres
      * @param autoriserRegex Regex qui autorisera ou nom la chaine
@@ -134,6 +136,21 @@ public class LectureClavier {
         //Retourne un string qui match avec le Regex
         return chaine;
     }
+
+
+    /**
+     * Demande un mots avec maj ou/et min ou/et underscore
+     * @return retourne forcement un mots
+     */
+    public String demandeMot(){
+        //Initialise les variable utile
+        String mot = "";
+        //demande un mots corespondant au Regex
+        mot= demandeRegex("[A-Za-z_]+", "lettres min ,maj et underscore");
+        //Retourne un string avec des lettres et des underscore
+        return mot;
+    }
+
 
 
 }

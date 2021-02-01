@@ -8,10 +8,13 @@ import java.util.regex.Pattern;
  * point d'entree du programme
  */
 public class Calculatrice {
-	public static void main(String[] arg){//Fonction principal
+	public static void main(String[] arg){
+		////Initialisation des variables
 		int choix =1;
+		//Initialise le scanner plus mon clavier personaliser avec des methodes pratique
 		Scanner clavier = new Scanner(System.in).useLocale(Locale.US);
 		LectureClavier clavierGigi = new LectureClavier(clavier);
+		
 		while (choix != 0){
 			choix = menu(clavierGigi);//Affiche le menu et demande un nombres
 			
@@ -49,6 +52,8 @@ public class Calculatrice {
 		//retourne le choix
 		return mode;
 	}
+
+
 	/**
 	 * Fait un calcul en fontion de 3 variables tapez au clavier 2 nombres et 1 operateur
 	 * @param clavierGigi L'entrer du clavier pour utiliser les methode personaliser
@@ -94,6 +99,8 @@ public class Calculatrice {
 		//Affiche le resultat
 		System.out.println(nombres1 + operateur + nombres2 + "=" + resultat);
 	}
+
+
 	/**
 	 * Fait des calcul trigonimetrique en fontion de 3 variables tapez au clavier. 2 nombres et un operateur
 	 * @param clavierGigi L'entrer du clavier pour utiliser les methode personaliser
@@ -139,6 +146,8 @@ public class Calculatrice {
 		//Affiche le resultat
 		System.out.println("L'angles est de " + resultat + " radian");
 	}
+
+	
 	/**
 	 * Fait un calcul  en fontion de une seule variables tapez au clavier. Puis il fait le calcul
 	 * @param clavierGigi L'entrer du clavier pour utiliser les methode personaliser
